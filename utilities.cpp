@@ -32,10 +32,36 @@ void affichage(int* mat[], int n)
 /* présentée en cours, en remplaçant toutefois la   */
 /* pile par une file                                */
 /****************************************************/
-void chaineaugmentante(int* c[], int* f[], int n, int ch[],int s, int t)
-{
-	
+bool chaineaugmentante(int* c[], int* f[], int n, int ch[], int s, int t) {
+    bool* visite = new bool[n];
+    for (int i = 0; i < n; i++) {
+        visite[i] = false;
+        ch[i] = -1;
+    }
+
+    std::queue<int> file;
+    file.push(s);
+    visite[s] = true;
+
+    while (!file.empty()) {
+        int u = file.front();
+        file.pop();
+
+        for (int v = 0; v < n; v++) {
+            if (!visite[v] && c[u][v] - f[u][v] > 0) {
+                file.push(v);
+                ch[v] = u;
+                visite[v] = true;
+            }
+        }
+    }
+
+    bool resultat = visite[t]; // Si t est atteint → chaîne augmentante trouvée
+
+    delete[] visite;
+    return resultat;
 }
+
 
 /****************************************************/
 /* Entrées :                                        */
