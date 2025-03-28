@@ -33,3 +33,16 @@ g++ main.cpp utilities.cpp -o flot
 ```bash
 ./flot
 ```
+
+
+
+## 🔎 Résultats attendus
+
+Affichage de la matrice des flots avant et après exécution.
+Calcul et affichage du flot maximum entre la source et le puits.
+Affichage de la coupe minimale (sommets accessibles depuis la source dans le graphe résiduel).
+
+
+## 👤 Auteur
+Malek – Licence 2 Informatique  
+Université d’Avignon – Année 2024/2025
