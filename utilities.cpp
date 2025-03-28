@@ -1,3 +1,8 @@
+/*
+ * utilities.cpp
+ * Fonctions utilitaires pour le calcul de flot maximum (algorithme d’Edmonds-Karp)
+ * Auteur : Malek
+ */
 
 #include <iostream>
 #include <fstream>
@@ -32,36 +37,38 @@ void affichage(int* mat[], int n)
 /* présentée en cours, en remplaçant toutefois la   */
 /* pile par une file                                */
 /****************************************************/
-bool chaineaugmentante(int* c[], int* f[], int n, int ch[], int s, int t) {
-    bool* visite = new bool[n];
+ 
+
+
+// Recherche d’une chaîne augmentante par BFS (Edmonds-Karp)
+void chaineaugmentante(int* c[], int* f[], int n, int ch[], int s, int t)
+{
+    queue<int> q;
+    bool visite[n];
+
     for (int i = 0; i < n; i++) {
         visite[i] = false;
         ch[i] = -1;
     }
 
-    std::queue<int> file;
-    file.push(s);
+    q.push(s);
     visite[s] = true;
 
-    while (!file.empty()) {
-        int u = file.front();
-        file.pop();
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
 
         for (int v = 0; v < n; v++) {
-            if (!visite[v] && c[u][v] - f[u][v] > 0) {
-                file.push(v);
-                ch[v] = u;
+            int residuel = c[u][v] - f[u][v];
+            if (!visite[v] && residuel > 0) {
                 visite[v] = true;
+                ch[v] = u;
+                if (v == t) return;
+                q.push(v);
             }
         }
     }
-
-    bool resultat = visite[t]; // Si t est atteint → chaîne augmentante trouvée
-
-    delete[] visite;
-    return resultat;
 }
-
 
 /****************************************************/
 /* Entrées :                                        */
@@ -73,11 +80,27 @@ bool chaineaugmentante(int* c[], int* f[], int n, int ch[], int s, int t) {
 /* ch : chaîne augmentante de s à t                 */
 /* Sortie : valeur d'augmentation du flot           */
 /****************************************************/
+
+// Incrémente le flot sur la chaîne trouvée
 int increment(int* c[], int* f[], int n, int ch[], int s, int t)
 {
-	return(0);
+    int flux = 1000000;
+    if (ch[t] == -1) return 0;
 
+    for (int v = t; v != s; v = ch[v]) {
+        int u = ch[v];
+        flux = min(flux, c[u][v] - f[u][v]);
+    }
+
+    for (int v = t; v != s; v = ch[v]) {
+        int u = ch[v];
+        f[u][v] += flux;
+        f[v][u] -= flux;
+    }
+
+    return flux;
 }
+
 
 /****************************************************/
 /* Entrées :                                        */
@@ -91,9 +114,47 @@ int increment(int* c[], int* f[], int n, int ch[], int s, int t)
 /* Flot Max de s à t                                */
 /* Coupe minimum stockée dans S                     */
 /****************************************************/
+
+// Algorithme de Ford-Fulkerson avec parcours en largeur (Edmonds-Karp)
 int fordfulkerson(int* c[], int* f[], int n, int s, int t, bool* S)
 {
-	return(0);
-}
+    int flot_max = 0;
+    int ch[n];
 
+    while (true)
+    {
+        for (int i = 0; i < n; i++) ch[i] = -1;
+        chaineaugmentante(c, f, n, ch, s, t);
+        if (ch[t] == -1) break;
+        flot_max += increment(c, f, n, ch, s, t);
+    }
+
+    // Marquage des sommets accessibles pour la coupe minimum
+    bool visite[n];
+    for (int i = 0; i < n; i++) visite[i] = false;
+
+    queue<int> q;
+    q.push(s);
+    visite[s] = true;
+
+    while (!q.empty())
+    {
+        int u = q.front();
+        q.pop();
+
+        for (int v = 0; v < n; v++) {
+            int residuel = c[u][v] - f[u][v];
+            if (!visite[v] && residuel > 0) {
+                visite[v] = true;
+                q.push(v);
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        S[i] = visite[i];
+    }
+
+    return flot_max;
+}
 
