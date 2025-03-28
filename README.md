@@ -38,11 +38,13 @@ g++ main.cpp utilities.cpp -o flot
 
 ## 🔎 Résultats attendus
 
-Affichage de la matrice des flots avant et après exécution.
-Calcul et affichage du flot maximum entre la source et le puits.
-Affichage de la coupe minimale (sommets accessibles depuis la source dans le graphe résiduel).
+- Affichage de la matrice des flots avant et après exécution.
+- Calcul et affichage du flot maximum entre la source et le puits.
+- Affichage de la coupe minimale (sommets accessibles depuis la source dans le graphe résiduel).
+
+<img width="364" alt="Capture d’écran 2025-03-29 à 00 19 32" src="https://github.com/user-attachments/assets/a19cb265-fb88-472a-ad43-a3ca1007d5d6" />
 
 
 ## 👤 Auteur
-Malek – Licence 2 Informatique  
-Université d’Avignon – Année 2024/2025
+- Malek – Licence 2 Informatique  
+- Université d’Avignon – Année 2024/2025
