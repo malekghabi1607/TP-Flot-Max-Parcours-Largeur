@@ -1,4 +1,10 @@
 
+/*
+ * utilities.h
+ * Déclarations des fonctions pour le calcul du flot maximum (algorithme d’Edmonds-Karp)
+ * Auteur : Malek
+ */
+
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
